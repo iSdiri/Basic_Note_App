@@ -2,9 +2,11 @@ using Basic_dotnet_API.DTOs;
 using Basic_dotnet_API.Mappers;
 using Basic_dotnet_API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Basic_dotnet_API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController(ITaskRepository repo) : ControllerBase
