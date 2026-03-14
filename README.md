@@ -65,5 +65,5 @@ Swagger UI available at: `http://localhost:5092/swagger`
 
 - [x] PostgreSQL database
 - [ ] Input validation (FluentValidation)
-- [ ] JWT Authentication
+- [x] JWT Authentication
 - [ ] Unit tests
