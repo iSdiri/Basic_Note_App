@@ -9,6 +9,8 @@ A RESTful API built with ASP.NET Core 8 demonstrating a clean project structure 
 - Entity Framework Core
 - PostgreSQL
 - Swagger / OpenAPI
+- JWT Authentication
+- FluentValidation
 
 ## Prerequisites
 
@@ -27,6 +29,11 @@ Update `appsettings.json` with your PostgreSQL credentials:
 {
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Port=5432;Database=BasicApiDb;Username=YOUR_USERNAME;Password=YOUR_PASSWORD"
+  },
+  "Jwt": {
+    "Key": "your-secret-key-min-32-characters",
+    "Issuer": "BasicDotnetAPI",
+    "Audience": "BasicDotnetAPIUsers"
   }
 }
 ```
@@ -39,31 +46,47 @@ dotnet run
 
 Swagger UI available at: `http://localhost:5092/swagger`
 
+## Authentication
+
+This API uses JWT Bearer tokens. To access protected routes:
+
+1. Register via `POST /api/auth/register`
+2. Login via `POST /api/auth/login`
+3. Copy the token from the response
+4. Click **Authorize** in Swagger and paste the token
+
 ## Endpoints
+
+### Auth
+
+| Method | Route | Description | Protected |
+|--------|-------|-------------|-----------|
+| POST | /api/auth/register | Register a new user | No |
+| POST | /api/auth/login | Login and get token | No |
 
 ### Users
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | /api/user | Get all users |
-| GET | /api/user/{id} | Get user by ID |
-| POST | /api/user | Create a user |
-| PUT | /api/user/{id} | Update a user |
-| DELETE | /api/user/{id} | Delete a user |
+| Method | Route | Description | Protected |
+|--------|-------|-------------|-----------|
+| GET | /api/user | Get all users | Yes |
+| GET | /api/user/{id} | Get user by ID | Yes |
+| POST | /api/user | Create a user | Yes |
+| PUT | /api/user/{id} | Update a user | Yes |
+| DELETE | /api/user/{id} | Delete a user | Yes |
 
 ### Tasks
 
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | /api/task | Get all tasks |
-| GET | /api/task/{id} | Get task by ID |
-| POST | /api/task | Create a task |
-| PUT | /api/task/{id} | Update a task |
-| DELETE | /api/task/{id} | Delete a task |
+| Method | Route | Description | Protected |
+|--------|-------|-------------|-----------|
+| GET | /api/task | Get all tasks | Yes |
+| GET | /api/task/{id} | Get task by ID | Yes |
+| POST | /api/task | Create a task | Yes |
+| PUT | /api/task/{id} | Update a task | Yes |
+| DELETE | /api/task/{id} | Delete a task | Yes |
 
 ## Roadmap
 
 - [x] PostgreSQL database
-- [ ] Input validation (FluentValidation)
 - [x] JWT Authentication
+- [x] Input validation (FluentValidation)
 - [ ] Unit tests
