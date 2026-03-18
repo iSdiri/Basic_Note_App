@@ -1,23 +1,44 @@
 # Basic .NET API
 
-A RESTful API built with ASP.NET Core 8 demonstrating a clean project structure with controllers, DTOs, mappers, repositories and models.
+A fullstack app built with ASP.NET Core 8 and React demonstrating a clean project structure with controllers, DTOs, mappers, repositories, models, JWT authentication and input validation.
 
 ## Tech Stack
 
-- .NET 8
-- C#
+**Backend**
+- .NET 8 / C#
 - Entity Framework Core
 - PostgreSQL
 - Swagger / OpenAPI
 - JWT Authentication
 - FluentValidation
 
+**Frontend**
+- React + Vite
+- React Router
+- Axios
+
 ## Prerequisites
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Node.js](https://nodejs.org/)
+
+## Project Structure
+```
+├── Controllers        # HTTP endpoints
+├── Data               # DbContext and seed data
+├── DTOs               # Data Transfer Objects
+├── Mappers            # DTO <-> Model conversion
+├── Models             # Domain entities
+├── Repositories       # Data access layer
+├── Services           # TokenService (JWT)
+├── Validators         # FluentValidation rules
+└── client/            # React frontend
+```
 
 ## Getting Started
+
+### Backend
 ```bash
 git clone https://github.com/TON_USERNAME/Basic_dotnet_API.git
 cd Basic_dotnet_API
@@ -45,6 +66,15 @@ dotnet run
 ```
 
 Swagger UI available at: `http://localhost:5092/swagger`
+
+### Frontend
+```bash
+cd client
+npm install
+npm run dev
+```
+
+App available at: `http://localhost:5173`
 
 ## Authentication
 
@@ -89,4 +119,6 @@ This API uses JWT Bearer tokens. To access protected routes:
 - [x] PostgreSQL database
 - [x] JWT Authentication
 - [x] Input validation (FluentValidation)
+- [x] React frontend
 - [ ] Unit tests
+- [ ] Deployment
