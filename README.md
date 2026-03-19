@@ -1,6 +1,6 @@
-# Basic .NET API
+# Basic Note App
 
-A fullstack app built with ASP.NET Core 8 and React demonstrating a clean project structure with controllers, DTOs, mappers, repositories, models, JWT authentication and input validation.
+A fullstack note-taking app built with ASP.NET Core 8 and React. Features JWT authentication, folder organization, and full CRUD for notes.
 
 ## Tech Stack
 
@@ -40,8 +40,8 @@ A fullstack app built with ASP.NET Core 8 and React demonstrating a clean projec
 
 ### Backend
 ```bash
-git clone https://github.com/TON_USERNAME/Basic_dotnet_API.git
-cd Basic_dotnet_API
+git clone https://github.com/isdiri/Basic_Note_App.git
+cd Basic_Note_App
 dotnet restore
 ```
 
@@ -104,21 +104,33 @@ This API uses JWT Bearer tokens. To access protected routes:
 | PUT | /api/user/{id} | Update a user | Yes |
 | DELETE | /api/user/{id} | Delete a user | Yes |
 
-### Tasks
+### Folders
 
 | Method | Route | Description | Protected |
 |--------|-------|-------------|-----------|
-| GET | /api/task | Get all tasks | Yes |
-| GET | /api/task/{id} | Get task by ID | Yes |
-| POST | /api/task | Create a task | Yes |
-| PUT | /api/task/{id} | Update a task | Yes |
-| DELETE | /api/task/{id} | Delete a task | Yes |
+| GET | /api/folder | Get all folders | Yes |
+| GET | /api/folder/user/{userId} | Get folders by user | Yes |
+| GET | /api/folder/{id} | Get folder by ID | Yes |
+| POST | /api/folder | Create a folder | Yes |
+| PUT | /api/folder/{id} | Update a folder | Yes |
+| DELETE | /api/folder/{id} | Delete a folder | Yes |
+
+### Notes
+
+| Method | Route | Description | Protected |
+|--------|-------|-------------|-----------|
+| GET | /api/note | Get all notes | Yes |
+| GET | /api/note/{id} | Get note by ID | Yes |
+| POST | /api/note | Create a note | Yes |
+| PUT | /api/note/{id} | Update a note | Yes |
+| DELETE | /api/note/{id} | Delete a note | Yes |
 
 ## Roadmap
 
 - [x] PostgreSQL database
 - [x] JWT Authentication
 - [x] Input validation (FluentValidation)
-- [x] React frontend
+- [x] Folder organization
+- [x] React frontend with dark theme
 - [ ] Unit tests
 - [ ] Deployment
