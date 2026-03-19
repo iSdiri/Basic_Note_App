@@ -1,8 +1,10 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic_dotnet_API", "Basic_dotnet_API.csproj", "{2AA386BC-E9C3-F72C-3114-B98B54C2806B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic_Note_App.Tests", "Basic_Note_App.Tests\Basic_Note_App.Tests.csproj", "{D842639E-953F-4005-8F0D-2519055D1FD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,6 +16,10 @@ Global
 		{2AA386BC-E9C3-F72C-3114-B98B54C2806B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA386BC-E9C3-F72C-3114-B98B54C2806B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AA386BC-E9C3-F72C-3114-B98B54C2806B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D842639E-953F-4005-8F0D-2519055D1FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D842639E-953F-4005-8F0D-2519055D1FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D842639E-953F-4005-8F0D-2519055D1FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D842639E-953F-4005-8F0D-2519055D1FD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
