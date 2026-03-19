@@ -132,5 +132,5 @@ This API uses JWT Bearer tokens. To access protected routes:
 - [x] Input validation (FluentValidation)
 - [x] Folder organization
 - [x] React frontend with dark theme
-- [ ] Unit tests
+- [x] Unit tests
 - [ ] Deployment
