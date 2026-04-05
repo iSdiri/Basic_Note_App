@@ -147,3 +147,8 @@ This API uses JWT Bearer tokens. To access protected routes:
 - [x] React frontend with dark theme
 - [x] Unit tests
 - [ ] Deployment
+
+## Live Demo
+
+- **Frontend**: https://basic-note-app-blond.vercel.app
+- **API**: https://basicnoteapp-production.up.railway.app/swagger
