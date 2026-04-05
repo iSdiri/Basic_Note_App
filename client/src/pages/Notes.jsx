@@ -31,7 +31,7 @@ export default function Notes() {
 
   const createFolder = async () => {
     if (!newFolderName) return;
-    await api.post('/folder', { name: newFolderName, userId });
+    await api.post('/folder', { name: newFolderName, appUserId: userId });
     setNewFolderName('');
     setShowFolderModal(false);
     fetchFolders();
