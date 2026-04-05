@@ -16,8 +16,12 @@ export default function Notes() {
   const userId = getUserId();
 
   const fetchFolders = async () => {
-    const res = await api.get(`/folder/user/${userId}`);
-    setFolders(res.data);
+    try {
+      const res = await api.get(`/folder/user/${userId}`);
+      setFolders(res.data);
+    } catch {
+      navigate('/login');
+    }
   };
 
   const fetchNotes = async (folderId) => {
@@ -69,9 +73,82 @@ export default function Notes() {
   useEffect(() => { fetchFolders(); }, []);
   useEffect(() => { if (selectedFolder) fetchNotes(selectedFolder); }, [selectedFolder]);
 
+  // FOLDER PAGE
+  if (!selectedFolder) {
+    const allFolders = [...folders, null]; // null = + button
+    const pairs = [];
+    for (let i = 0; i < allFolders.length; i += 2) {
+      pairs.push([allFolders[i], allFolders[i + 1]]);
+    }
+
+    return (
+      <div style={styles.folderPage}>
+        {/* Header */}
+        <div style={styles.folderPageHeader}>
+          <span style={styles.logo}>📝 NoteApp</span>
+          <button style={styles.logoutBtn} onClick={logout}>Sign out</button>
+        </div>
+
+        {/* Folder Grid */}
+        <div style={styles.folderGrid}>
+          {folders.length === 0 ? (
+            <div style={styles.folderRow}>
+              <div style={styles.addFolderCard} onClick={() => setShowFolderModal(true)}>
+                <span style={styles.addIcon}>+</span>
+                <span style={styles.addLabel}>New Folder</span>
+              </div>
+            </div>
+          ) : (
+            pairs.map((pair, i) => (
+              <div key={i} style={styles.folderRow}>
+                {pair[0] && (
+                  <div style={styles.folderCard} onClick={() => setSelectedFolder(pair[0].id)}>
+                    <div style={styles.folderCardTop}>
+                      <span style={styles.folderIcon}>📁</span>
+                      <button style={styles.folderDeleteBtn} onClick={e => { e.stopPropagation(); deleteFolder(pair[0].id); }}>✕</button>
+                    </div>
+                    <span style={styles.folderName}>{pair[0].name}</span>
+                  </div>
+                )}
+                {pair[1] ? (
+                  <div style={styles.folderCard} onClick={() => setSelectedFolder(pair[1].id)}>
+                    <div style={styles.folderCardTop}>
+                      <span style={styles.folderIcon}>📁</span>
+                      <button style={styles.folderDeleteBtn} onClick={e => { e.stopPropagation(); deleteFolder(pair[1].id); }}>✕</button>
+                    </div>
+                    <span style={styles.folderName}>{pair[1].name}</span>
+                  </div>
+                ) : (
+                  <div style={styles.addFolderCard} onClick={() => setShowFolderModal(true)}>
+                    <span style={styles.addIcon}>+</span>
+                    <span style={styles.addLabel}>New Folder</span>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Folder Modal */}
+        {showFolderModal && (
+          <div style={styles.overlay}>
+            <div style={styles.modal}>
+              <h3 style={styles.modalTitle}>New Folder</h3>
+              <input style={styles.modalInput} placeholder="Folder name" value={newFolderName} onChange={e => setNewFolderName(e.target.value)} />
+              <div style={styles.modalActions}>
+                <button style={styles.cancelBtn} onClick={() => setShowFolderModal(false)}>Cancel</button>
+                <button style={styles.confirmBtn} onClick={createFolder}>Create</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // NOTES PAGE
   return (
     <div style={styles.app}>
-      {/* Sidebar */}
       <div style={styles.sidebar}>
         <div style={styles.sidebarHeader}>
           <span style={styles.logo}>📝 NoteApp</span>
@@ -82,6 +159,7 @@ export default function Notes() {
           <button style={styles.addBtn} onClick={() => setShowFolderModal(true)}>+</button>
         </div>
         <div style={styles.folderList}>
+          <div style={styles.backBtn} onClick={() => setSelectedFolder(null)}>← Back</div>
           {folders.map(folder => (
             <div
               key={folder.id}
@@ -95,36 +173,27 @@ export default function Notes() {
         </div>
       </div>
 
-      {/* Main */}
       <div style={styles.main}>
-        {selectedFolder ? (
-          <>
-            <div style={styles.mainHeader}>
-              <h2 style={styles.folderTitle}>{folders.find(f => f.id === selectedFolder)?.name}</h2>
-              <button style={styles.newNoteBtn} onClick={() => setShowNoteModal(true)}>+ New Note</button>
-            </div>
-            <div style={styles.noteGrid}>
-              {notes.length === 0 && <p style={styles.empty}>No notes yet. Create one!</p>}
-              {notes.map(note => (
-                <div key={note.id} style={styles.noteCard}>
-                  <div style={styles.noteCardHeader}>
-                    <span style={styles.noteTitle}>{note.title}</span>
-                    <div style={styles.noteActions}>
-                      <button style={styles.editNoteBtn} onClick={() => { setEditNote(note); setShowEditModal(true); }}>✏️</button>
-                      <button style={styles.deleteNoteBtn} onClick={() => deleteNote(note.id)}>✕</button>
-                    </div>
-                  </div>
-                  <p style={styles.noteContent}>{note.content}</p>
-                  <span style={styles.noteDate}>{new Date(note.createdAt).toLocaleDateString()}</span>
+        <div style={styles.mainHeader}>
+          <h2 style={styles.folderTitle}>{folders.find(f => f.id === selectedFolder)?.name}</h2>
+          <button style={styles.newNoteBtn} onClick={() => setShowNoteModal(true)}>+ New Note</button>
+        </div>
+        <div style={styles.noteGrid}>
+          {notes.length === 0 && <p style={styles.empty}>No notes yet. Create one!</p>}
+          {notes.map(note => (
+            <div key={note.id} style={styles.noteCard}>
+              <div style={styles.noteCardHeader}>
+                <span style={styles.noteTitle}>{note.title}</span>
+                <div style={styles.noteActions}>
+                  <button style={styles.editNoteBtn} onClick={() => { setEditNote(note); setShowEditModal(true); }}>✏️</button>
+                  <button style={styles.deleteNoteBtn} onClick={() => deleteNote(note.id)}>✕</button>
                 </div>
-              ))}
+              </div>
+              <p style={styles.noteContent}>{note.content}</p>
+              <span style={styles.noteDate}>{new Date(note.createdAt).toLocaleDateString()}</span>
             </div>
-          </>
-        ) : (
-          <div style={styles.emptyState}>
-            <p>Select a folder to view notes</p>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* Folder Modal */}
@@ -175,15 +244,31 @@ export default function Notes() {
 }
 
 const styles = {
+  // Folder Page
+  folderPage: { minHeight: '100vh', background: '#000', color: '#e6edf3', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' },
+  folderPageHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 2rem', borderBottom: '1px solid #21262d' },
+  folderGrid: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', padding: '3rem 2rem' },
+  folderRow: { display: 'flex', gap: '1.5rem' },
+  folderCard: { width: '160px', height: '160px', background: '#0d1117', border: '1px solid #21262d', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1rem', cursor: 'pointer', transition: 'border-color 0.2s' },
+  folderCardTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
+  folderIcon: { fontSize: '2rem' },
+  folderDeleteBtn: { background: 'none', border: 'none', color: '#6e7681', cursor: 'pointer', fontSize: '0.8rem' },
+  folderName: { fontSize: '0.95rem', fontWeight: 600, color: '#e6edf3' },
+  addFolderCard: { width: '160px', height: '160px', background: '#0d1117', border: '2px dashed #30363d', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer', gap: '0.5rem' },
+  addIcon: { fontSize: '2rem', color: '#8b949e' },
+  addLabel: { fontSize: '0.85rem', color: '#8b949e' },
+
+  // Notes Page
   app: { display: 'flex', height: '100vh', background: '#000', color: '#e6edf3', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' },
   sidebar: { width: '240px', background: '#0d1117', borderRight: '1px solid #21262d', display: 'flex', flexDirection: 'column' },
   sidebarHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', borderBottom: '1px solid #21262d' },
   logo: { fontWeight: 700, fontSize: '1rem' },
-  logoutBtn: { background: 'none', border: 'none', color: '#8b949e', cursor: 'pointer', fontSize: '1.1rem' },
+  logoutBtn: { background: 'none', border: 'none', color: '#8b949e', cursor: 'pointer', fontSize: '0.9rem' },
   foldersHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem' },
   sectionLabel: { fontSize: '0.7rem', color: '#8b949e', fontWeight: 600, letterSpacing: '0.05em' },
   addBtn: { background: 'none', border: '1px solid #30363d', color: '#e6edf3', borderRadius: '4px', cursor: 'pointer', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' },
   folderList: { flex: 1, overflowY: 'auto' },
+  backBtn: { padding: '0.6rem 1rem', color: '#58a6ff', cursor: 'pointer', fontSize: '0.85rem' },
   folderItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.6rem 1rem', cursor: 'pointer', borderRadius: '6px', margin: '0 0.5rem', color: '#8b949e', fontSize: '0.9rem' },
   folderActive: { background: '#21262d', color: '#e6edf3' },
   deleteFolderBtn: { background: 'none', border: 'none', color: '#6e7681', cursor: 'pointer', fontSize: '0.75rem', padding: '0 2px' },
@@ -201,7 +286,8 @@ const styles = {
   noteContent: { color: '#8b949e', fontSize: '0.85rem', margin: 0, lineHeight: 1.5 },
   noteDate: { color: '#6e7681', fontSize: '0.75rem' },
   empty: { color: '#8b949e' },
-  emptyState: { display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, color: '#8b949e' },
+
+  // Modals
   overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100 },
   modal: { background: '#161b22', border: '1px solid #30363d', borderRadius: '8px', padding: '1.5rem', width: '360px', display: 'flex', flexDirection: 'column', gap: '1rem' },
   modalTitle: { margin: 0, color: '#e6edf3' },
