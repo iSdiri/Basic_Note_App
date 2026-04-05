@@ -13,7 +13,7 @@ export default function Notes() {
   const [editNote, setEditNote] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const navigate = useNavigate();
-  const userId = getUserId();
+  const userId = getUserId(); console.log("userId:", userId);
 
   const fetchFolders = async () => {
     try {
